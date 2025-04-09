@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import Header from "../components/Header";
+import NavBar from "../components/NavBar.tsx";
 import HeroSection from "../components/HeroSection";
 import AboutSection from "../components/AboutSection";
 import ContactSection from "../components/ContactSection";
 import useDarkMode from "../hooks/darkMode";
+import RecipesDisplay from "../components/RecipeDisplay.tsx";
 
 const MainPage: React.FC = () => {
     const { toggleDarkMode } = useDarkMode();
@@ -14,10 +15,15 @@ const MainPage: React.FC = () => {
 
     const toggleModal = () => setIsModalOpen(!isModalOpen);
     const toggleSignupModal = () => setIsSignModalOpen(!isSignModalOpen);
+    const [recipes, setRecipes] = useState<any[]>([]);
 
     useEffect(() => {
+        const storedRecipes = JSON.parse(localStorage.getItem("recipes") || "[]");
+        setRecipes(storedRecipes);
+    }, []);
+    useEffect(() => {
         const handleScroll = () => {
-            const sections = ["home", "about", "recipe", "contact"];
+            const sections = ["home", "about", "recipes", "contact"];
             sections.forEach((section) => {
                 const sectionElement = document.getElementById(section);
                 if (sectionElement) {
@@ -35,7 +41,7 @@ const MainPage: React.FC = () => {
 
     return (
         <div className="relative flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-orange-100 via-white to-yellow-50 overflow-hidden">
-            <Header
+            <NavBar
                 activeSection={activeSection}
                 toggleDarkMode={toggleDarkMode}
                 isModalOpen={isModalOpen}
@@ -45,6 +51,7 @@ const MainPage: React.FC = () => {
             />
             <HeroSection />
             <AboutSection />
+            <RecipesDisplay recipes={recipes} />
             <ContactSection />
         </div>
     );

@@ -108,9 +108,9 @@ const NavBar: React.FC<HeaderProps> = ({
                     <span className="hidden sm:inline">About</span>
                 </button>
                 <button
-                    onClick={() => handleScroll("recipe")}
+                    onClick={() => handleScroll("recipes")}
                     className={`flex items-center gap-2 px-3 py-2 rounded-md ${
-                        activeSection === "recipe"
+                        activeSection === "recipes"
                             ? "text-orange-800 font-bold"
                             : "text-gray-600"
                     } hover:bg-gray-100`}
