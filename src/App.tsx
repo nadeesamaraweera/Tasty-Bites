@@ -1,27 +1,22 @@
 import './App.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import WelcomePage from './pages/HomePage.tsx';
+import HomePage from './pages/HomePage.tsx';
+import Footer from './components/Footer';
 
 function App() {
     const routes = createBrowserRouter([
         {
             path: '/',
-            element: <WelcomePage />, // ✅ Shows WelcomePage on root path
+            element: <HomePage />,
         },
-        // You can add more routes like this:
-        // {
-        //   path: '/login',
-        //   element: <LoginPage />
-        // },
-        // {
-        //   path: '/signup',
-        //   element: <SignupPage />
-        // },
     ]);
 
     return (
-        <div className="min-h-screen bg-white text-black dark:bg-gray-900 dark:text-white transition-colors duration-300">
-            <RouterProvider router={routes} />
+        <div className="min-h-screen flex flex-col justify-between bg-white text-black dark:bg-gray-900 dark:text-white transition-colors duration-300">
+            <div className="flex-grow">
+                <RouterProvider router={routes} />
+            </div>
+            <Footer />
         </div>
     );
 }
