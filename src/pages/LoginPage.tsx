@@ -9,7 +9,7 @@ interface LoginProps {
     toggleModal: () => void;
 }
 
-export const Login: React.FC<LoginProps> = ({ toggleModal }) => {
+export const LoginPage: React.FC<LoginProps> = ({ toggleModal }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
@@ -29,7 +29,7 @@ export const Login: React.FC<LoginProps> = ({ toggleModal }) => {
 
             Swal.fire({
                 icon: "success",
-                title: "Login Successful!",
+                title: "LoginPage Successful!",
                 text: "Welcome back, chef! 👨‍🍳",
                 confirmButtonColor: "#F97316"
             }).then(() => {
@@ -62,7 +62,7 @@ export const Login: React.FC<LoginProps> = ({ toggleModal }) => {
                 <div className="w-full lg:w-1/2 bg-gray-100 flex items-center justify-center rounded-lg p-4">
                     <img
                         src="/src/assets/login.jpg"
-                        alt="Recipe Login"
+                        alt="Recipe LoginPage"
                         className="w-full h-full object-cover rounded-b-full"
                     />
                 </div>
@@ -130,4 +130,4 @@ export const Login: React.FC<LoginProps> = ({ toggleModal }) => {
     );
 };
 
-export default Login;
+export default LoginPage;

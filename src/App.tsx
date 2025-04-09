@@ -1,14 +1,30 @@
 import './App.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import HomePage from './pages/HomePage.tsx';
+import LoginPage from './pages/LoginPage.tsx';
+import SignupPage from './pages/SignupPage.tsx';
 import Footer from './components/Footer';
+import MainPage from "./pages/MainPage.tsx";
+import HomePage from "./pages/HomePage.tsx";
 
 function App() {
     const routes = createBrowserRouter([
         {
             path: '/',
+            element: <MainPage />,
+        },
+        {
+            path: '/home',
             element: <HomePage />,
         },
+        {
+            path: '/login',
+            element: <LoginPage toggleModal={() => {}} />
+        },
+        {
+            path: '/signup',
+            element: <SignupPage toggleSignupModal={() => {}} />,
+        },
+
     ]);
 
     return (

@@ -37,7 +37,7 @@ export const SignupPage: React.FC<SignupProps> = ({ toggleSignupModal }) => {
                 text: "Welcome to Tasty Bites! 🎉",
                 confirmButtonColor: "#F97316"
             }).then(() => {
-                navigate("/log");
+                navigate("/login");
                 if (toggleSignupModal) toggleSignupModal();
             });
         } else {
@@ -137,7 +137,7 @@ export const SignupPage: React.FC<SignupProps> = ({ toggleSignupModal }) => {
                     <div className="mt-4 text-center text-gray-600">
                         <p>
                             Already have an account?
-                            <Link to="LoginPage" className="text-orange-500 ml-1">
+                            <Link to="/login" className="text-orange-500 ml-1">
                                 Log in
                             </Link>
                         </p>
