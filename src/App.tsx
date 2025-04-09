@@ -5,6 +5,7 @@ import SignupPage from './pages/SignupPage.tsx';
 import Footer from './components/Footer';
 import MainPage from "./pages/MainPage.tsx";
 import HomePage from "./pages/HomePage.tsx";
+import RecipePage from "./pages/RecipePage.tsx";
 
 function App() {
     const routes = createBrowserRouter([
@@ -15,6 +16,10 @@ function App() {
         {
             path: '/home',
             element: <HomePage />,
+        },
+        {
+            path: '/recipe',
+            element: <RecipePage />,
         },
         {
             path: '/login',

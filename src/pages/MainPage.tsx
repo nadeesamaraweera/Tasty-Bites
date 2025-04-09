@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { ContactIcon, HomeIcon, MoonIcon, UserIcon } from "lucide-react";
+import {ContactIcon, CookingPot, HomeIcon, MoonIcon, UserIcon} from "lucide-react";
 import useDarkMode from "../hooks/darkMode.ts";
 import LoginPage from "./LoginPage.tsx";
 import  {SignupPage} from "./SignupPage.tsx";
+import RecipePage from "./RecipePage.tsx";
 
 const MainPage: React.FC = () => {
     const { toggleDarkMode } = useDarkMode();
@@ -22,7 +23,7 @@ const MainPage: React.FC = () => {
 
     useEffect(() => {
         const handleScroll = () => {
-            const sections = ["home", "about", "contact"];
+            const sections = ["home", "about","recipe", "contact" ];
             sections.forEach((section) => {
                 const sectionElement = document.getElementById(section);
                 if (sectionElement) {
@@ -57,6 +58,11 @@ const MainPage: React.FC = () => {
                           className={`flex items-center gap-2 px-3 py-2 rounded-md ${activeSection === "about" ? "text-orange-800 font-bold" : "text-gray-600 "}`}>
                         <UserIcon size={20}/>
                         <span className="hidden sm:inline">About</span>
+                    </Link>
+                    <Link to="#recipe"
+                          className={`flex items-center gap-2 px-3 py-2 rounded-md ${activeSection === "recipe" ? "text-orange-800 font-bold" : "text-gray-600 "}`}>
+                        <CookingPot size={20}/>
+                        <span className="hidden sm:inline">Recipes</span>
                     </Link>
                     <Link to="#contact"
                           className={`flex items-center gap-2 px-3 py-2 rounded-md ${activeSection === "contact" ? "text-orange-800 font-bold" : "text-gray-600 "}`}>
@@ -156,9 +162,11 @@ const MainPage: React.FC = () => {
                     </div>
                 </div>
             </section>
+            <RecipePage />
+
 
             <section id="contact"
-                     className="w-full bg-gradient-to-r from-yellow-200 to-orange-100 py-12 border-t border-orange-300 text-center">
+                     className="w-full bg-gradient-to-r from-yellow-100 to-orange-100 py-12 border-t border-orange-300 text-center">
                 <div className="px-6 md:px-0 max-w-4xl mx-auto">
                     <h3 className="text-4xl font-extrabold text-orange-700 mb-6 tracking-wide uppercase">
                         Get In Touch?
