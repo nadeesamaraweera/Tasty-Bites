@@ -1,44 +1,26 @@
-import './App.css';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import LoginPage from './pages/LoginPage.tsx';
-import SignupPage from './pages/SignupPage.tsx';
-import Footer from './components/Footer';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import RecipePage from "./pages/RecipePage";
+import RecipeDetails from "./pages/RecipeDetails";
+import Login from "./pages/LoginPage.tsx";
+import Signup from "./pages/SignupPage.tsx";
+import CreateRecipe from "./pages/CreateRecipe";
+import Footer from "./components/Footer";
 import MainPage from "./pages/MainPage.tsx";
-import HomePage from "./pages/HomePage.tsx";
-import RecipePage from "./pages/RecipePage.tsx";
+
 
 function App() {
-    const routes = createBrowserRouter([
-        {
-            path: '/',
-            element: <MainPage />,
-        },
-        {
-            path: '/home',
-            element: <HomePage />,
-        },
-        {
-            path: '/recipe',
-            element: <RecipePage />,
-        },
-        {
-            path: '/login',
-            element: <LoginPage toggleModal={() => {}} />
-        },
-        {
-            path: '/signup',
-            element: <SignupPage toggleSignupModal={() => {}} />,
-        },
-
-    ]);
-
     return (
-        <div className="min-h-screen flex flex-col justify-between bg-white text-black dark:bg-gray-900 dark:text-white transition-colors duration-300">
-            <div className="flex-grow">
-                <RouterProvider router={routes} />
-            </div>
+        <BrowserRouter>
+            <Routes>
+                <Route path="/" element={<MainPage />} />
+                <Route path="/recipes" element={<RecipePage />} />
+                <Route path="/recipes/:id" element={<RecipeDetails />} />
+                <Route path="/login" element={<Login  />}/>
+                <Route path="/signup" element={<Signup />} />
+                <Route path="/create-recipe" element={<CreateRecipe />} />
+            </Routes>
             <Footer />
-        </div>
+        </BrowserRouter>
     );
 }
 
