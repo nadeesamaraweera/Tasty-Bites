@@ -12,27 +12,16 @@ import {
     UserCircle,
 } from "lucide-react";
 import Swal from "sweetalert2";
-import SignUpPopup from "../pages/SignUpPopup"; // Updated path
-import LoginPopup from "../pages/LoginPopup"; // Login Modal Import
+import SignUpPopup from "../pages/SignUpPopup";
+import LoginPopup from "../pages/LoginPopup";
 
-interface NavProps {
-    activeSection: string;
-    toggleDarkMode?: () => void;
-    isModalOpen?: boolean;
-    toggleModal?: () => void;
-    isLoginModalOpen?: boolean;
-    toggleSignupModal?: () => void;
-    isLoggedIn: boolean;
-    setIsLoggedIn: (status: boolean) => void;
-}
-
-const NavBar: React.FC<NavProps> = ({ activeSection }) => {
+const NavBar: React.FC = () => {
     const navigate = useNavigate();
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
     const [showProfileMenu, setShowProfileMenu] = useState<boolean>(false);
     const [darkMode, setDarkMode] = useState(false);
     const [openSignupPopup, setOpenSignupPopup] = useState<boolean>(false);
-    const [openLoginPopup, setOpenLoginPopup] = useState<boolean>(false); // Login modal state
+    const [openLoginPopup, setOpenLoginPopup] = useState<boolean>(false);
 
     useEffect(() => {
         document.body.style.backgroundColor = darkMode ? "#000" : "#fff";
@@ -40,23 +29,6 @@ const NavBar: React.FC<NavProps> = ({ activeSection }) => {
     }, [darkMode]);
 
     const toggleDarkMode = () => setDarkMode((prev) => !prev);
-
-    const handleScroll = (sectionId: string) => {
-        const section = document.getElementById(sectionId);
-        if (section) {
-            section.scrollIntoView({ behavior: "smooth" });
-        }
-    };
-
-    const handleSwitchToLogin = () => {
-        setOpenSignupPopup(false); // Close the signup modal
-        setOpenLoginPopup(true); // Open the login modal
-    };
-
-    const handleSwitchToSignup = () => {
-        setOpenSignupPopup(true); // Close the signup modal
-        setOpenLoginPopup(false); // Open the login modal
-    };
 
     const handleAddRecipeClick = () => {
         if (!isLoggedIn) {
@@ -71,6 +43,13 @@ const NavBar: React.FC<NavProps> = ({ activeSection }) => {
             });
         } else {
             navigate("/add-recipe");
+        }
+    };
+
+    const handleScrollToSection = (sectionId: string) => {
+        const section = document.getElementById(sectionId);
+        if (section) {
+            section.scrollIntoView({ behavior: "smooth" });
         }
     };
 
@@ -99,34 +78,51 @@ const NavBar: React.FC<NavProps> = ({ activeSection }) => {
 
             {/* Navigation */}
             <nav className="flex gap-6 text-orange-600 font-medium text-lg mx-auto">
-                {["home", "about", "recipes", "contact"].map((section) => (
-                    <button
-                        key={section}
-                        onClick={() => handleScroll(section)}
-                        className={`flex items-center gap-2 px-3 py-2 rounded-md ${
-                            activeSection === section ? "text-orange-800 font-bold" : "text-gray-600"
-                        } hover:bg-gray-100`}
-                    >
-                        {section === "home" && <HomeIcon size={20} />}
-                        {section === "about" && <UserIcon size={20} />}
-                        {section === "recipes" && <CookingPot size={20} />}
-                        {section === "contact" && <ContactIcon size={20} />}
-                        <span className="hidden sm:inline capitalize">{section}</span>
-                    </button>
-                ))}
+                <button
+                    onClick={() => navigate("/")}
+                    className="flex items-center gap-2 px-3 py-2 rounded-md text-gray-600 hover:bg-gray-100"
+                >
+                    <HomeIcon size={20} />
+                    <span className="hidden sm:inline">Home</span>
+                </button>
+
+                {/* Scroll instead of routing */}
+                <button
+                    onClick={() => handleScrollToSection("about")}
+                    className="flex items-center gap-2 px-3 py-2 rounded-md text-gray-600 hover:bg-gray-100"
+                >
+                    <UserIcon size={20} />
+                    <span className="hidden sm:inline">About</span>
+                </button>
+
+                <button
+                    onClick={() => handleScrollToSection("recipes-display")}
+                    className="flex items-center gap-2 px-3 py-2 rounded-md text-gray-600 hover:bg-gray-100"
+                >
+                    <CookingPot size={20} />
+                    <span className="hidden sm:inline">Recipes</span>
+                </button>
+
+                <button
+                    onClick={() => handleScrollToSection("contact")}
+                    className="flex items-center gap-2 px-3 py-2 rounded-md text-gray-600 hover:bg-gray-100"
+                >
+                    <ContactIcon size={20} />
+                    <span className="hidden sm:inline">Contact</span>
+                </button>
             </nav>
 
             {/* Right Side */}
             <div className="space-x-4 flex items-center">
-                <button onClick={() => navigate("/favorite-recipes")} className="text-gray-600 hover:text-orange-600 transition" aria-label="Favorite Recipes">
+                <button onClick={() => navigate("/favorite-recipes")} className="text-gray-600 hover:text-orange-600 transition">
                     <Heart size={22} />
                 </button>
 
-                <button onClick={handleAddRecipeClick} className="text-gray-600 hover:text-orange-600 transition" aria-label="Add Recipe">
+                <button onClick={handleAddRecipeClick} className="text-gray-600 hover:text-orange-600 transition">
                     <ClipboardPlus size={22} />
                 </button>
 
-                <button onClick={toggleDarkMode} className={`transition ${darkMode ? "text-black" : "text-white"}`} aria-label="Toggle Dark Mode">
+                <button onClick={toggleDarkMode} className={`transition ${darkMode ? "text-black" : "text-white"}`}>
                     <MoonIcon />
                 </button>
 
@@ -135,17 +131,13 @@ const NavBar: React.FC<NavProps> = ({ activeSection }) => {
                         <button
                             onClick={() => setShowProfileMenu(!showProfileMenu)}
                             className="text-gray-600 hover:text-orange-600 transition"
-                            aria-label="Profile"
                         >
                             <UserCircle size={22} />
                         </button>
                         {showProfileMenu && (
                             <div className="absolute right-0 mt-2 w-40 bg-white border rounded-md shadow-lg z-50">
                                 <button
-                                    onClick={() => {
-                                        navigate("/my-recipes");
-                                        setShowProfileMenu(false);
-                                    }}
+                                    onClick={() => navigate("/my-recipes")}
                                     className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-orange-100"
                                 >
                                     My Recipes
@@ -161,30 +153,34 @@ const NavBar: React.FC<NavProps> = ({ activeSection }) => {
                         )}
                     </div>
                 ) : (
-                    <div>
-                        <button
-                            onClick={() => setOpenSignupPopup(true)}
-                            className="px-4 py-2 text-orange-500 border border-orange-500 rounded-md hover:bg-orange-500 hover:text-white transition"
-                        >
-                            Signup
-                        </button>
-                    </div>
+                    <button
+                        onClick={() => setOpenSignupPopup(true)}
+                        className="px-4 py-2 text-orange-500 border border-orange-500 rounded-md hover:bg-orange-500 hover:text-white transition"
+                    >
+                        Signup
+                    </button>
                 )}
 
                 {/* Modals for Signup and Login */}
                 {openSignupPopup && (
                     <SignUpPopup
                         setShowSignup={setOpenSignupPopup}
-                        setIsLoggedIn={setIsLoggedIn} // Pass setIsLoggedIn to update login state
-                        onSwitchToLogin={handleSwitchToLogin}
+                        setIsLoggedIn={setIsLoggedIn}
+                        onSwitchToLogin={() => {
+                            setOpenSignupPopup(false);
+                            setOpenLoginPopup(true);
+                        }}
                     />
                 )}
 
                 {openLoginPopup && (
                     <LoginPopup
                         setShowLogin={setOpenLoginPopup}
-                        setIsLoggedIn={setIsLoggedIn} // Pass setIsLoggedIn to update login state
-                        onSwitchToSignup={handleSwitchToSignup}
+                        setIsLoggedIn={setIsLoggedIn}
+                        onSwitchToSignup={() => {
+                            setOpenLoginPopup(false);
+                            setOpenSignupPopup(true);
+                        }}
                     />
                 )}
             </div>

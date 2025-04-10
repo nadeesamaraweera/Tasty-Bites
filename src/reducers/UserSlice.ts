@@ -23,7 +23,7 @@ const userSlice = createSlice({
 
     login: (state, action: PayloadAction<{ username: string; password: string }>) => {
       const user = state.users.find(
-        (u) => u.username === action.payload.username && u.password === action.payload.password
+          (u) => u.username === action.payload.username && u.password === action.payload.password
       );
       if (user) {
         state.currentUser = user;
@@ -34,7 +34,7 @@ const userSlice = createSlice({
       state.currentUser = null;
       localStorage.removeItem("currentUser");
     },
-    
+
     loadUserFromLocalStorage: (state) => {
       const storedUser = localStorage.getItem("currentUser");
       if (storedUser) {

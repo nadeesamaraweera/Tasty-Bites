@@ -1,51 +1,28 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { User } from "../model/User";
+import { Recipe } from "../model/Recipe";
 
-interface UserState {
-  users: User[];
-  currentUser: User | null;
-}
 
-const initialState: UserState = {
-  users: [], // Registered users
-  currentUser: null,
-};
+const initialState: Recipe[] = [];
 
-const userSlice = createSlice({
-  name: "user",
+const recipeSlice = createSlice({
+  name: "recipe",
   initialState,
   reducers: {
-    signup: (state, action: PayloadAction<User>) => {
-      state.users.push(action.payload);
-      state.currentUser = action.payload;
-      localStorage.setItem("currentUser", JSON.stringify(action.payload));
+    addRecipe: (state, action: PayloadAction<Recipe>) => {
+      state.push(action.payload);
     },
-
-    login: (state, action: PayloadAction<{ username: string; password: string }>) => {
-      const user = state.users.find(
-          (u) => u.username === action.payload.username && u.password === action.payload.password
-      );
-      if (user) {
-        state.currentUser = user;
-        localStorage.setItem("currentUser", JSON.stringify(user));
+    updateRecipe: (state, action: PayloadAction<Recipe>) => {
+      const index = state.findIndex((recipe) => recipe.id === action.payload.id);
+      if (index !== -1) {
+        state[index] = action.payload;
       }
     },
-    logout: (state) => {
-      state.currentUser = null;
-      localStorage.removeItem("currentUser");
-    },
-
-    loadUserFromLocalStorage: (state) => {
-      const storedUser = localStorage.getItem("currentUser");
-      if (storedUser) {
-        state.currentUser = JSON.parse(storedUser);
-      }
+    deleteRecipe: (state, action: PayloadAction<string>) => {
+      return state.filter((recipe) => recipe.id !== action.payload);
     },
   },
 });
 
-export const { signup, login, logout, loadUserFromLocalStorage } = userSlice.actions;
-export default userSlice.reducer;
+export const { addRecipe, updateRecipe, deleteRecipe } = recipeSlice.actions;
 
-export class addRecipe {
-}
+export default recipeSlice.reducer;

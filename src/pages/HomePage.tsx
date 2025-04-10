@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import NavBar from "../components/NavBar.tsx";
 import HeroSection from "../components/HeroSection";
 import AboutSection from "../components/AboutSection";
 import ContactSection from "../components/ContactSection";
@@ -17,7 +16,7 @@ const HomePage: React.FC = () => {
 
     useEffect(() => {
         const handleScroll = () => {
-            const sections = ["home", "about", "recipes", "contact"];
+            const sections = ["home", "about", "recipe-display", "contact"];
             sections.forEach((section) => {
                 const sectionElement = document.getElementById(section);
                 if (sectionElement) {
@@ -35,9 +34,7 @@ const HomePage: React.FC = () => {
 
     return (
         <div className="relative flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-orange-100 via-white to-yellow-50 overflow-hidden">
-            <NavBar
-                activeSection={activeSection}
-            />
+
             <HeroSection />
             <AboutSection />
             <RecipesDisplay recipes={recipes} />

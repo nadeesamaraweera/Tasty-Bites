@@ -25,10 +25,7 @@ const LoginPopup: React.FC<LoginPopupProps> = ({ setShowLogin, onSwitchToSignup,
             return;
         }
 
-        // Check if the email and password match what's saved in localStorage (from sign-up)
         const storedData = localStorage.getItem("user");
-
-
 
         if (storedData) {
             const user = JSON.parse(storedData);

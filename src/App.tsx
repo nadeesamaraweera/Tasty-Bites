@@ -1,11 +1,14 @@
 import SignUpPopup from "./pages/SignUpPopup.tsx";
 import LoginPopup from "./pages/LoginPopup.tsx";
 import HomePage from "./pages/HomePage.tsx";
-import React, {useState} from "react";
+import  {useState} from "react";
 import NavBar from "./components/NavBar.tsx";
 import {Routes,Route} from "react-router-dom";
 import Footer from "./components/Footer.tsx";
 import { BrowserRouter } from "react-router-dom";
+import FavoriteRecipe from "./pages/FavouriteRecipe.tsx";
+import {Provider} from "react-redux";
+import {store} from "./store/store.ts";
 
 
 function App() {
@@ -17,6 +20,7 @@ function App() {
     });
 
     return (
+        <Provider store={store}>
         <BrowserRouter>
             <NavBar
                 activeSection="home"
@@ -30,6 +34,8 @@ function App() {
             />
             <Routes>
                 <Route path="/" element={<HomePage />} />
+                <Route path="/favorite-recipes" element={<FavoriteRecipe />} />
+
                 {/* Add your other routes */}
             </Routes>
             <Footer />
@@ -54,6 +60,7 @@ function App() {
                 />
             )}
         </BrowserRouter>
+        </Provider>
     );
 }
 export default App

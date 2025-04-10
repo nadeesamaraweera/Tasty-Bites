@@ -1,241 +1,107 @@
-import { Box, Button, TextField, Typography } from "@mui/material";
-import { useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { assets } from "../assets/assets";
+import { FaHeart } from "react-icons/fa";
 
-// Type definition (optional unless you're passing the prop)
-interface AddRecipesProps {
-    onAddRecipe?: (newRecipe: any) => void;
+interface RecipeItemProps {
+    id: string;
+    recipeTitle: string;
+    image: string;
+    ingredients: string[];
+    cookingTime: string;
+    instructions: string;
+    isFavoritePage?: boolean;
+    onRemoveFavorite?: () => void;
+    onClick?: () => void;
 }
 
-const AddRecipes: React.FC<AddRecipesProps> = () => {
-    const [image, setImage] = useState<File | null>(null);
-    const [preview, setPreview] = useState<string | null>(null);
-    const inputRef = useRef<HTMLInputElement>(null);
-    const navigate = useNavigate();
+const RecipeItem: React.FC<RecipeItemProps> = ({
+                                                   id,
+                                                   recipeTitle,
+                                                   image,
+                                                   ingredients,
+                                                   cookingTime,
+                                                   instructions,
+                                                   isFavoritePage = false,
+                                                   onRemoveFavorite,
+                                                   onClick,
+                                               }) => {
+    const [isFavorite, setIsFavorite] = useState(false);
 
-    const [formData, setFormData] = useState({
-        image: "",
-        recipeTitle: "",
-        cookingTime: "",
-        ingredients: "",
-        instructions: "",
-    });
+    useEffect(() => {
+        const existing = localStorage.getItem(id);
+        if (existing) setIsFavorite(true);
+    }, [id]);
 
-    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (file) {
-            setImage(file);
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                if (typeof reader.result === "string") {
-                    setPreview(reader.result);
-                }
-            };
-            reader.readAsDataURL(file);
+    const handleFavoriteClick = () => {
+        const newFavoriteStatus = !isFavorite;
+        setIsFavorite(newFavoriteStatus);
+
+        if (newFavoriteStatus) {
+            localStorage.setItem(
+                id,
+                JSON.stringify({ id, recipeTitle, image, ingredients, instructions })
+            );
+        } else {
+            localStorage.removeItem(id);
         }
     };
 
-    const triggerFileSelect = () => {
-        inputRef.current?.click();
-    };
-
-    const handleAddRecipe = (e: React.FormEvent) => {
-        e.preventDefault();
-
-        const newRecipe = {
-            id: Math.random().toString(36).substr(2, 9),
-            image: preview || "",
-            recipeTitle: formData.recipeTitle,
-            cookingTime: formData.cookingTime,
-            ingredients: formData.ingredients
-                .split(",")
-                .map((item) => item.trim())
-                .filter(Boolean),
-            instructions: formData.instructions,
-        };
-
-        setFormData({
-            image: "",
-            recipeTitle: "",
-            cookingTime: "",
-            ingredients: "",
-            instructions: "",
-        });
-        setImage(null);
-        setPreview(null);
-
-        console.log("Recipe saved successfully:", newRecipe);
-        navigate("/");
+    const handleIconClick = () => {
+        if (isFavoritePage && onRemoveFavorite) {
+            onRemoveFavorite();
+        } else {
+            handleFavoriteClick();
+        }
     };
 
     return (
-        <Box
-            sx={{
-                minHeight: "70vh",
-                backgroundColor: "#ffffff",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                fontFamily: "Montserrat, sans-serif",
-                p: 4,
-            }}
+        <div
+            className="bg-orange-100 rounded-2xl shadow-md w-full cursor-pointer overflow-hidden"
+            onClick={onClick}
         >
-            <Box
-                sx={{
-                    backgroundColor: "#f6e1d2",
-                    padding: 3,
-                    borderRadius: 2,
-                    maxWidth: 600,
-                    width: "100%",
-                    border: "3px solid #b28c71",
-                }}
-            >
-                <Typography
-                    variant="h5"
-                    sx={{
-                        textAlign: "center",
-                        color: "#bd5f1b",
-                        fontWeight: 700,
-                        mb: 3,
+            <div className="w-full h-48 overflow-hidden">
+                <img src={image} alt={recipeTitle} className="w-full h-full object-cover" />
+            </div>
+
+            <div className="p-4 space-y-3">
+                <div className="flex justify-between items-center">
+                    <h3 className="text-lg font-bold font-montserrat">{recipeTitle}</h3>
+                    <img src={assets.rating_starts} alt="rating" className="w-20" />
+                </div>
+
+                <div className="text-sm font-semibold font-montserrat">
+                    Cooking Time: {cookingTime}
+                </div>
+
+                <p className="text-sm text-gray-700 font-montserrat">{instructions}</p>
+
+                <div className="font-bold font-montserrat mt-2">Ingredients:</div>
+                <ul className="list-disc list-inside text-sm text-gray-700">
+                    {Array.isArray(ingredients) ? (
+                        ingredients.map((ingredient, index) => (
+                            <li key={index}>{ingredient}</li>
+                        ))
+                    ) : (
+                        <li>No ingredients available</li>
+                    )}
+                </ul>
+
+                <button
+                    onClick={(e) => {
+                        e.stopPropagation(); // Prevent card click
+                        handleIconClick();
                     }}
+                    className="mt-2"
                 >
-                    Add New Recipe
-                </Typography>
-
-                <form onSubmit={handleAddRecipe} noValidate>
-                    {/* Image Upload Box */}
-                    <Box
-                        sx={{
-                            width: "100%",
-                            height: 200,
-                            backgroundColor: "#fff",
-                            border: "2px dashed #ccc",
-                            borderRadius: 2,
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            cursor: "pointer",
-                            mb: 2,
-                            position: "relative",
-                            overflow: "hidden",
-                        }}
-                        onClick={triggerFileSelect}
-                    >
-                        {preview ? (
-                            <img
-                                src={preview}
-                                alt="Preview"
-                                style={{
-                                    width: "100%",
-                                    height: "100%",
-                                    objectFit: "cover",
-                                }}
-                            />
-                        ) : (
-                            <Typography color="gray">Upload Image</Typography>
-                        )}
-                        <input
-                            type="file"
-                            accept="image/*"
-                            ref={inputRef}
-                            style={{ display: "none" }}
-                            onChange={handleImageChange}
-                        />
-                    </Box>
-
-                    {/* Recipe Name */}
-                    <TextField
-                        placeholder="Recipe Name"
-                        fullWidth
-                        value={formData.recipeTitle}
-                        onChange={(e) =>
-                            setFormData({ ...formData, recipeTitle: e.target.value })
-                        }
-                        sx={textFieldStyles}
+                    <FaHeart
+                        className={`text-xl ${
+                            isFavorite || isFavoritePage ? "text-red-500" : "text-gray-400"
+                        }`}
                     />
-
-                    {/* Cooking Time */}
-                    <TextField
-                        placeholder="Cooking Time"
-                        fullWidth
-                        value={formData.cookingTime}
-                        onChange={(e) =>
-                            setFormData({ ...formData, cookingTime: e.target.value })
-                        }
-                        sx={textFieldStyles}
-                    />
-
-                    {/* Ingredients */}
-                    <TextField
-                        placeholder="Ingredients (comma separated)"
-                        multiline
-                        rows={3}
-                        fullWidth
-                        value={formData.ingredients}
-                        onChange={(e) =>
-                            setFormData({ ...formData, ingredients: e.target.value })
-                        }
-                        sx={textFieldStyles}
-                    />
-
-                    {/* Instructions */}
-                    <TextField
-                        placeholder="Instructions"
-                        multiline
-                        rows={4}
-                        fullWidth
-                        value={formData.instructions}
-                        onChange={(e) =>
-                            setFormData({ ...formData, instructions: e.target.value })
-                        }
-                        sx={textFieldStyles}
-                    />
-
-                    {/* Submit Button */}
-                    <Button
-                        type="submit"
-                        variant="contained"
-                        fullWidth
-                        sx={{
-                            mt: 2,
-                            fontWeight: 600,
-                            backgroundColor: "#7e3f12",
-                            fontFamily: "Montserrat, sans-serif",
-                            "&:hover": {
-                                backgroundColor: "#5d2d0a",
-                                border: "2px solid white",
-                            },
-                        }}
-                    >
-                        Add Recipe
-                    </Button>
-                </form>
-            </Box>
-        </Box>
+                </button>
+            </div>
+        </div>
     );
 };
 
-// Shared TextField Styles
-const textFieldStyles = {
-    mb: 2,
-    fontSize: "13px",
-    fontFamily: "Montserrat, sans-serif",
-    "& .MuiOutlinedInput-root": {
-        fontFamily: "Montserrat, sans-serif",
-        "& fieldset": {
-            borderColor: "#ccc",
-        },
-        "&:hover fieldset": {
-            borderColor: "#FF5722",
-        },
-        "&.Mui-focused fieldset": {
-            borderColor: "#FF5722",
-            borderWidth: "3px",
-        },
-    },
-    "& .MuiInputBase-input::placeholder": {
-        fontFamily: "Montserrat, sans-serif",
-    },
-};
-
-export default AddRecipes;
+export default RecipeItem;
