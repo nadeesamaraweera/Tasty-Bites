@@ -7,9 +7,11 @@ interface RecipeItemProps {
   recipeTitle: string;
   image: string;
   ingredients: string[];
+  cookingTime: string;
   instructions: string;
   isFavoritePage?: boolean;
   onRemoveFavorite?: () => void;
+  onClick?: () => void;
 }
 
 const RecipeItem: React.FC<RecipeItemProps> = ({
@@ -17,9 +19,11 @@ const RecipeItem: React.FC<RecipeItemProps> = ({
                                                  recipeTitle,
                                                  image,
                                                  ingredients,
+                                                 cookingTime,
                                                  instructions,
                                                  isFavoritePage = false,
                                                  onRemoveFavorite,
+                                                 onClick,
                                                }) => {
   const [isFavorite, setIsFavorite] = useState(false);
 
@@ -28,10 +32,11 @@ const RecipeItem: React.FC<RecipeItemProps> = ({
     if (existing) setIsFavorite(true);
   }, [id]);
 
-  const handleFavoriteClick = () => {
-    const newStatus = !isFavorite;
-    setIsFavorite(newStatus);
-    if (newStatus) {
+  const handleFavoriteClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation(); // Prevent triggering card click
+    const newFavoriteStatus = !isFavorite;
+    setIsFavorite(newFavoriteStatus);
+    if (newFavoriteStatus) {
       localStorage.setItem(
           id,
           JSON.stringify({ id, recipeTitle, image, ingredients, instructions })
@@ -41,18 +46,20 @@ const RecipeItem: React.FC<RecipeItemProps> = ({
     }
   };
 
-  const handleIconClick = () => {
+  const handleIconClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation(); // Prevent triggering card click
     if (isFavoritePage && onRemoveFavorite) {
       onRemoveFavorite();
     } else {
-      handleFavoriteClick();
+      handleFavoriteClick(e);
     }
   };
 
   return (
       <div
           key={id}
-          className="bg-orange-100 rounded-xl shadow-md overflow-hidden flex flex-col justify-between"
+          onClick={onClick} // 🔥 Now triggers modal open
+          className="bg-orange-200 rounded-xl shadow-md overflow-hidden flex flex-col justify-between transition-transform duration-200 transform hover:scale-105 cursor-pointer"
       >
         {/* Image */}
         <div className="w-full h-48 overflow-hidden">
@@ -65,16 +72,17 @@ const RecipeItem: React.FC<RecipeItemProps> = ({
 
         {/* Content */}
         <div className="p-4 space-y-3 font-montserrat relative">
-          {/* Title + Rating */}
           <div className="flex justify-between items-center">
             <h3 className="text-lg font-bold text-orange-900">{recipeTitle}</h3>
             <img src={assets.rating_starts} alt="rating" className="h-5" />
           </div>
 
-          {/* Instructions */}
+          <p className="text-sm text-gray-700">
+            <span className="font-semibold text-orange-800">Cooking Time:</span> {cookingTime || "N/A"}
+          </p>
+
           <p className="text-gray-700 text-sm">{instructions}</p>
 
-          {/* Ingredients */}
           <div>
             <h4 className="text-orange-800 font-semibold">Ingredients:</h4>
             <ul className="list-disc list-inside text-sm text-gray-600 mt-1">
@@ -86,10 +94,9 @@ const RecipeItem: React.FC<RecipeItemProps> = ({
             </ul>
           </div>
 
-          {/* Favorite Icon */}
           <button
               onClick={handleIconClick}
-              className="absolute top-4 right-4 p-2 rounded-full hover:bg-white/70 transition"
+              className="absolute bottom-2 right-4 p-2 rounded-full hover:bg-white/70 transition"
           >
             <Heart
                 size={20}
