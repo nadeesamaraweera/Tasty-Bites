@@ -42,7 +42,7 @@ const NavBar: React.FC = () => {
                 confirmButtonColor: "#ef832b",
             });
         } else {
-            navigate("/add-recipe");
+            navigate("/recipes");
         }
     };
 

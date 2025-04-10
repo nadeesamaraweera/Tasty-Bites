@@ -1,15 +1,15 @@
 import SignUpPopup from "./pages/SignUpPopup.tsx";
 import LoginPopup from "./pages/LoginPopup.tsx";
 import HomePage from "./pages/HomePage.tsx";
-import  {useState} from "react";
+import { useState } from "react";
 import NavBar from "./components/NavBar.tsx";
-import {Routes,Route} from "react-router-dom";
+import { Routes, Route, BrowserRouter } from "react-router-dom";
 import Footer from "./components/Footer.tsx";
-import { BrowserRouter } from "react-router-dom";
 import FavoriteRecipe from "./pages/FavouriteRecipe.tsx";
-import {Provider} from "react-redux";
-import {store} from "./store/store.ts";
 
+import AddRecipes from "./components/AddRecipe.tsx";
+import {useDispatch} from "react-redux";
+import {addRecipe} from "./reducers/RecipeSlice.ts";
 
 function App() {
     const [showSignup, setShowSignup] = useState(false);
@@ -18,9 +18,13 @@ function App() {
         const storedUser = localStorage.getItem("user");
         return !!storedUser;
     });
+    const dispatch = useDispatch();
+
+    const handleAddRecipe = (newRecipe: any): void => {
+        dispatch(addRecipe(newRecipe));
+    };
 
     return (
-        <Provider store={store}>
         <BrowserRouter>
             <NavBar
                 activeSection="home"
@@ -28,17 +32,21 @@ function App() {
                 toggleModal={() => setShowSignup(!showSignup)}
                 isLoginModalOpen={showLogin}
                 toggleSignupModal={() => setShowLogin(!showLogin)}
-                // ↓ pass down
                 isLoggedIn={isLoggedIn}
                 setIsLoggedIn={setIsLoggedIn}
             />
+
             <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/favorite-recipes" element={<FavoriteRecipe />} />
-
-                {/* Add your other routes */}
+                <Route
+                    path="/recipes"
+                    element={<AddRecipes onAddRecipe={handleAddRecipe} />}
+                />
             </Routes>
+
             <Footer />
+
             {showSignup && (
                 <SignUpPopup
                     setShowSignup={setShowSignup}
@@ -60,7 +68,9 @@ function App() {
                 />
             )}
         </BrowserRouter>
-        </Provider>
     );
 }
-export default App
+
+
+
+export default App;

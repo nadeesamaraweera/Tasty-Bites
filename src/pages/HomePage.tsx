@@ -37,7 +37,7 @@ const HomePage: React.FC = () => {
 
             <HeroSection />
             <AboutSection />
-            <RecipesDisplay recipes={recipes} />
+            <RecipesDisplay/>
             <ContactSection />
         </div>
     );

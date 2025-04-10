@@ -4,7 +4,6 @@ import SearchBar from "../components/SearchBar";
 import { Recipe } from "../model/Recipe";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteRecipe, updateRecipe } from "../reducers/RecipeSlice";
-import {  } from "../store/store";
 import Swal from "sweetalert2";
 import {RootState} from "@reduxjs/toolkit/query";
 
@@ -107,7 +106,7 @@ const RecipesDisplay: React.FC = () => {
     });
 
     return (
-        <section id="recipes-display"className="w-full bg-gradient-to-r from-yellow-100 to-orange-100 py-12 border-t border-orange-300 text-center">
+        <section id="recipes-display"className="w-full bg-gradient-to-r from-yellow-250 to-orange-100 py-12 border-t border-orange-300 text-center">
             <h3 className="text-4xl font-extrabold text-orange-700 mb-6 tracking-wide uppercase">
                 Top Recipes Just for You 🍽️</h3>
 
