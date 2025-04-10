@@ -43,5 +43,8 @@ TastyBites is a **modern recipe-sharing frontend** built with React, TypeScript,
 Clone the repository to your local machine:
 
 ```bash
-git clone https://github.com/yehaniharshika/recipe-sharing-platform-treinetic-practical-assignment.git
-cd recipe-sharing-platform-treinetic-practical-assignment
+git clone https://github.com/nadeesamaraweera/Tasty-Bites.git
+
+```
+## 🪪 License
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
