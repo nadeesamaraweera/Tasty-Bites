@@ -55,6 +55,11 @@ const RecipeItem: React.FC<RecipeItemProps> = ({
     }
   };
 
+  const handleMoreInfoClick = () => {
+    // You can replace this with any action, such as opening a modal or navigating to a detailed recipe page
+    console.log("More information about the recipe:", recipeTitle);
+  };
+
   return (
       <div
           key={id}
@@ -94,9 +99,10 @@ const RecipeItem: React.FC<RecipeItemProps> = ({
             </ul>
           </div>
 
+          {/* Favorite Button */}
           <button
               onClick={handleIconClick}
-              className="absolute bottom-2 right-4 p-2 rounded-full hover:bg-white/70 transition"
+              className="absolute bottom-12 right-4 p-2 rounded-full hover:bg-white/70 transition"
           >
             <Heart
                 size={20}
@@ -105,6 +111,14 @@ const RecipeItem: React.FC<RecipeItemProps> = ({
                     isFavorite || isFavoritePage ? "text-red-500" : "text-gray-400"
                 }`}
             />
+          </button>
+
+          {/* More About This Recipe Button */}
+          <button
+              onClick={handleMoreInfoClick}
+              className="mt-4 w-full py-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-md transition"
+          >
+            More About This Recipe
           </button>
         </div>
       </div>

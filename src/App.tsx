@@ -10,6 +10,7 @@ import FavoriteRecipe from "./pages/FavouriteRecipe.tsx";
 import AddRecipes from "./components/AddRecipe.tsx";
 import {useDispatch} from "react-redux";
 import {addRecipe} from "./reducers/RecipeSlice.ts";
+import MyRecipePage from "./pages/MyRecipePage.tsx";
 
 function App() {
     const [showSignup, setShowSignup] = useState(false);
@@ -43,6 +44,8 @@ function App() {
                     path="/recipes"
                     element={<AddRecipes onAddRecipe={handleAddRecipe} />}
                 />
+                <Route path="/my-recipes" element={<MyRecipePage />} />
+
             </Routes>
 
             <Footer />
