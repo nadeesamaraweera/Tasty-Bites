@@ -87,14 +87,11 @@ const NavBar: React.FC = () => {
             </div>
 
             {/* Navigation */}
-            <nav className="flex gap-6 text-orange-600 font-medium text-lg mx-auto">
+            <nav className="flex gap-6  font-medium text-lg mx-auto">
                 <button
                     onClick={() => handleScrollToSection("home")}
-                    className={`flex items-center gap-2 px-3 py-2 rounded-md transition duration-300 ${
-                        darkMode
-                            ? "text-white hover:bg-gray-800"
-                            : "text-gray-600 hover:bg-gray-100"
-                    }`}
+                    className="flex items-center gap-2 px-3 py-2 rounded-md text-gray-600 hover:text-orange-600"
+
                 >
                     <HomeIcon size={20}/>
                     <span className="hidden sm:inline">Home</span>
@@ -102,7 +99,7 @@ const NavBar: React.FC = () => {
 
                 <button
                     onClick={() => handleScrollToSection("about")}
-                    className="flex items-center gap-2 px-3 py-2 rounded-md text-gray-600 hover:bg-gray-100"
+                    className="flex items-center gap-2 px-3 py-2 rounded-md text-gray-600 hover:text-orange-600"
                 >
                     <UserIcon size={20}/>
                     <span className="hidden sm:inline">About</span>
@@ -110,7 +107,7 @@ const NavBar: React.FC = () => {
 
                 <button
                     onClick={() => handleScrollToSection("recipes-display")}
-                    className="flex items-center gap-2 px-3 py-2 rounded-md text-gray-600 hover:bg-gray-100"
+                    className="flex items-center gap-2 px-3 py-2 rounded-md text-gray-600 hover:text-orange-600"
                 >
                     <CookingPot size={20}/>
                     <span className="hidden sm:inline">Recipes</span>
@@ -118,7 +115,7 @@ const NavBar: React.FC = () => {
 
                 <button
                     onClick={() => handleScrollToSection("contact")}
-                    className="flex items-center gap-2 px-3 py-2 rounded-md text-gray-600 hover:bg-gray-100"
+                    className="flex items-center gap-2 px-3 py-2 rounded-md text-gray-600 hover:text-orange-600"
                 >
                     <ContactIcon size={20}/>
                     <span className="hidden sm:inline">Contact</span>
@@ -133,11 +130,14 @@ const NavBar: React.FC = () => {
                 </button>
 
                 <button onClick={handleAddRecipeClick} className="text-gray-600 hover:text-orange-600 transition">
-                    <ClipboardPlus size={22} />
+                    <ClipboardPlus size={22}/>
                 </button>
 
-                <button onClick={toggleDarkMode} className={`transition ${darkMode ? "text-black" : "text-white"}`}>
-                    <MoonIcon />
+                <button
+                    onClick={toggleDarkMode}
+                    className={`transition hover:text-orange-600 ${darkMode ? "text-white" : "text-gray-600"}`}
+                >
+                    <MoonIcon size={22}/>
                 </button>
 
                 {isLoggedIn ? (
@@ -146,7 +146,7 @@ const NavBar: React.FC = () => {
                             onClick={() => setShowProfileMenu(!showProfileMenu)}
                             className="text-gray-600 hover:text-orange-600 transition"
                         >
-                            <UserCircle size={22} />
+                            <UserCircle size={22}/>
                         </button>
                         {showProfileMenu && (
                             <div className="absolute right-0 mt-2 w-40 bg-white border rounded-md shadow-lg z-50">
@@ -160,7 +160,7 @@ const NavBar: React.FC = () => {
                                     onClick={handleLogout}
                                     className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-orange-100"
                                 >
-                                    <LogOut size={16} className="inline mr-1" />
+                                    <LogOut size={16} className="inline mr-1"/>
                                     Logout
                                 </button>
                             </div>
