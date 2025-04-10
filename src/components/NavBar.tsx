@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
     ContactIcon,
@@ -12,38 +12,50 @@ import {
     UserCircle,
 } from "lucide-react";
 import Swal from "sweetalert2";
-import LoginPage from "../pages/LoginPage";
-import { SignupPage } from "../pages/SignupPage";
+import SignUpPopup from "../pages/SignUpPopup"; // Updated path
+import LoginPopup from "../pages/LoginPopup"; // Login Modal Import
 
-interface HeaderProps {
+interface NavProps {
     activeSection: string;
-    toggleDarkMode: () => void;
-    isModalOpen: boolean;
-    toggleModal: () => void;
-    isSignModalOpen: boolean;
-    toggleSignupModal: () => void;
+    toggleDarkMode?: () => void;
+    isModalOpen?: boolean;
+    toggleModal?: () => void;
+    isLoginModalOpen?: boolean;
+    toggleSignupModal?: () => void;
+    isLoggedIn: boolean;
+    setIsLoggedIn: (status: boolean) => void;
 }
 
-const NavBar: React.FC<HeaderProps> = ({
-                                           activeSection,
-                                           toggleDarkMode,
-                                           isModalOpen,
-                                           toggleModal,
-                                           isSignModalOpen,
-                                           toggleSignupModal,
-                                       }) => {
+const NavBar: React.FC<NavProps> = ({ activeSection }) => {
     const navigate = useNavigate();
-
-    // Add login and profile dropdown states
-    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false); // Set true after mock login
+    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
     const [showProfileMenu, setShowProfileMenu] = useState<boolean>(false);
+    const [darkMode, setDarkMode] = useState(false);
+    const [openSignupPopup, setOpenSignupPopup] = useState<boolean>(false);
+    const [openLoginPopup, setOpenLoginPopup] = useState<boolean>(false); // Login modal state
 
-    // Scroll function
+    useEffect(() => {
+        document.body.style.backgroundColor = darkMode ? "#000" : "#fff";
+        document.body.style.color = darkMode ? "#fff" : "#000";
+    }, [darkMode]);
+
+    const toggleDarkMode = () => setDarkMode((prev) => !prev);
+
     const handleScroll = (sectionId: string) => {
         const section = document.getElementById(sectionId);
         if (section) {
             section.scrollIntoView({ behavior: "smooth" });
         }
+    };
+
+    const handleSwitchToLogin = () => {
+        setOpenSignupPopup(false); // Close the signup modal
+        setOpenLoginPopup(true); // Open the login modal
+    };
+
+    const handleSwitchToSignup = () => {
+        setOpenSignupPopup(true); // Close the signup modal
+        setOpenLoginPopup(false); // Open the login modal
     };
 
     const handleAddRecipeClick = () => {
@@ -79,79 +91,46 @@ const NavBar: React.FC<HeaderProps> = ({
 
     return (
         <header className="w-full flex justify-between items-center px-8 py-4 bg-white shadow-md fixed top-0 z-10">
+            {/* Logo Section */}
             <div className="flex items-center space-x-3">
                 <img src="/src/assets/logo.png" alt="Logo" className="h-15 w-14" />
                 <h1 className="text-4xl font-bold text-orange-700">TastyBites</h1>
             </div>
 
+            {/* Navigation */}
             <nav className="flex gap-6 text-orange-600 font-medium text-lg mx-auto">
-                <button
-                    onClick={() => handleScroll("home")}
-                    className={`flex items-center gap-2 px-3 py-2 rounded-md ${
-                        activeSection === "home"
-                            ? "text-orange-800 font-bold"
-                            : "text-gray-600"
-                    } hover:bg-gray-100`}
-                >
-                    <HomeIcon size={20} />
-                    <span className="hidden sm:inline">Home</span>
-                </button>
-                <button
-                    onClick={() => handleScroll("about")}
-                    className={`flex items-center gap-2 px-3 py-2 rounded-md ${
-                        activeSection === "about"
-                            ? "text-orange-800 font-bold"
-                            : "text-gray-600"
-                    } hover:bg-gray-100`}
-                >
-                    <UserIcon size={20} />
-                    <span className="hidden sm:inline">About</span>
-                </button>
-                <button
-                    onClick={() => handleScroll("recipes")}
-                    className={`flex items-center gap-2 px-3 py-2 rounded-md ${
-                        activeSection === "recipes"
-                            ? "text-orange-800 font-bold"
-                            : "text-gray-600"
-                    } hover:bg-gray-100`}
-                >
-                    <CookingPot size={20} />
-                    <span className="hidden sm:inline">Recipes</span>
-                </button>
-                <button
-                    onClick={() => handleScroll("contact")}
-                    className={`flex items-center gap-2 px-3 py-2 rounded-md ${
-                        activeSection === "contact"
-                            ? "text-orange-800 font-bold"
-                            : "text-gray-600"
-                    } hover:bg-gray-100`}
-                >
-                    <ContactIcon size={20} />
-                    <span className="hidden sm:inline">Contact</span>
-                </button>
+                {["home", "about", "recipes", "contact"].map((section) => (
+                    <button
+                        key={section}
+                        onClick={() => handleScroll(section)}
+                        className={`flex items-center gap-2 px-3 py-2 rounded-md ${
+                            activeSection === section ? "text-orange-800 font-bold" : "text-gray-600"
+                        } hover:bg-gray-100`}
+                    >
+                        {section === "home" && <HomeIcon size={20} />}
+                        {section === "about" && <UserIcon size={20} />}
+                        {section === "recipes" && <CookingPot size={20} />}
+                        {section === "contact" && <ContactIcon size={20} />}
+                        <span className="hidden sm:inline capitalize">{section}</span>
+                    </button>
+                ))}
             </nav>
 
+            {/* Right Side */}
             <div className="space-x-4 flex items-center">
-                {/* Favorite */}
-                <button
-                    onClick={() => navigate("/favorite-recipes")}
-                    className="text-gray-600 hover:text-orange-600 transition"
-                    aria-label="Favorite Recipes"
-                >
+                <button onClick={() => navigate("/favorite-recipes")} className="text-gray-600 hover:text-orange-600 transition" aria-label="Favorite Recipes">
                     <Heart size={22} />
                 </button>
 
-                {/* Add Recipe */}
-                <button
-                    onClick={handleAddRecipeClick}
-                    className="text-gray-600 hover:text-orange-600 transition"
-                    aria-label="Add Recipe"
-                >
+                <button onClick={handleAddRecipeClick} className="text-gray-600 hover:text-orange-600 transition" aria-label="Add Recipe">
                     <ClipboardPlus size={22} />
                 </button>
 
-                {/* Profile Menu */}
-                {isLoggedIn && (
+                <button onClick={toggleDarkMode} className={`transition ${darkMode ? "text-black" : "text-white"}`} aria-label="Toggle Dark Mode">
+                    <MoonIcon />
+                </button>
+
+                {isLoggedIn ? (
                     <div className="relative inline-block">
                         <button
                             onClick={() => setShowProfileMenu(!showProfileMenu)}
@@ -181,44 +160,34 @@ const NavBar: React.FC<HeaderProps> = ({
                             </div>
                         )}
                     </div>
-                )}
-
-                {/* Dark Mode */}
-                <button
-                    className="text-gray-600 hover:text-orange-600 transition"
-                    onClick={toggleDarkMode}
-                    aria-label="Toggle Dark Mode"
-                >
-                    <MoonIcon size={22} />
-                </button>
-
-                {/* Login / Signup Buttons */}
-                {!isLoggedIn && (
-                    <>
-
+                ) : (
+                    <div>
                         <button
+                            onClick={() => setOpenSignupPopup(true)}
                             className="px-4 py-2 text-orange-500 border border-orange-500 rounded-md hover:bg-orange-500 hover:text-white transition"
-                            onClick={toggleSignupModal}
                         >
                             Signup
                         </button>
-                    </>
+                    </div>
+                )}
+
+                {/* Modals for Signup and Login */}
+                {openSignupPopup && (
+                    <SignUpPopup
+                        setShowSignup={setOpenSignupPopup}
+                        setIsLoggedIn={setIsLoggedIn} // Pass setIsLoggedIn to update login state
+                        onSwitchToLogin={handleSwitchToLogin}
+                    />
+                )}
+
+                {openLoginPopup && (
+                    <LoginPopup
+                        setShowLogin={setOpenLoginPopup}
+                        setIsLoggedIn={setIsLoggedIn} // Pass setIsLoggedIn to update login state
+                        onSwitchToSignup={handleSwitchToSignup}
+                    />
                 )}
             </div>
-
-            {/* Signup Modal */}
-            {isSignModalOpen && (
-                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-20">
-                    <SignupPage toggleSignupModal={toggleSignupModal}/>
-                </div>
-            )}
-
-            {/* Login Modal */}
-            {isModalOpen && (
-                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-20">
-                    <LoginPage toggleModal={toggleModal} />
-                </div>
-            )}
         </header>
     );
 };
