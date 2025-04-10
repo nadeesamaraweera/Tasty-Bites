@@ -46,13 +46,6 @@ const NavBar: React.FC = () => {
         }
     };
 
-    const handleScrollToSection = (sectionId: string) => {
-        const section = document.getElementById(sectionId);
-        if (section) {
-            section.scrollIntoView({ behavior: "smooth" });
-        }
-    };
-
     const handleLogout = () => {
         setIsLoggedIn(false);
         setShowProfileMenu(false);
@@ -68,30 +61,50 @@ const NavBar: React.FC = () => {
         });
     };
 
+    const handleScrollToSection = (sectionId: string) => {
+        const currentPath = window.location.pathname;
+
+        if (currentPath === "/") {
+            if (sectionId === "home") {
+                window.scrollTo({ top: 0, behavior: "smooth" });
+            } else {
+                const section = document.getElementById(sectionId);
+                if (section) {
+                    section.scrollIntoView({ behavior: "smooth" });
+                }
+            }
+        } else {
+            navigate(`/?scroll=${sectionId}`);
+        }
+    };
+
     return (
-        <header className="w-full flex justify-between items-center px-8 py-4 bg-white shadow-md fixed top-0 z-10">
+        <header className={`w-full flex justify-between items-center px-8 py-4 fixed top-0 z-10 shadow-md transition duration-300 ${darkMode ? "bg-black text-white" : "bg-white text-black"}`}>
             {/* Logo Section */}
             <div className="flex items-center space-x-3">
-                <img src="/src/assets/logo.png" alt="Logo" className="h-15 w-14" />
+                <img src="/src/assets/logo.png" alt="Logo" className="h-15 w-14"/>
                 <h1 className="text-4xl font-bold text-orange-700">TastyBites</h1>
             </div>
 
             {/* Navigation */}
             <nav className="flex gap-6 text-orange-600 font-medium text-lg mx-auto">
                 <button
-                    onClick={() => navigate("/")}
-                    className="flex items-center gap-2 px-3 py-2 rounded-md text-gray-600 hover:bg-gray-100"
+                    onClick={() => handleScrollToSection("home")}
+                    className={`flex items-center gap-2 px-3 py-2 rounded-md transition duration-300 ${
+                        darkMode
+                            ? "text-white hover:bg-gray-800"
+                            : "text-gray-600 hover:bg-gray-100"
+                    }`}
                 >
-                    <HomeIcon size={20} />
+                    <HomeIcon size={20}/>
                     <span className="hidden sm:inline">Home</span>
                 </button>
 
-                {/* Scroll instead of routing */}
                 <button
                     onClick={() => handleScrollToSection("about")}
                     className="flex items-center gap-2 px-3 py-2 rounded-md text-gray-600 hover:bg-gray-100"
                 >
-                    <UserIcon size={20} />
+                    <UserIcon size={20}/>
                     <span className="hidden sm:inline">About</span>
                 </button>
 
@@ -99,7 +112,7 @@ const NavBar: React.FC = () => {
                     onClick={() => handleScrollToSection("recipes-display")}
                     className="flex items-center gap-2 px-3 py-2 rounded-md text-gray-600 hover:bg-gray-100"
                 >
-                    <CookingPot size={20} />
+                    <CookingPot size={20}/>
                     <span className="hidden sm:inline">Recipes</span>
                 </button>
 
@@ -107,15 +120,16 @@ const NavBar: React.FC = () => {
                     onClick={() => handleScrollToSection("contact")}
                     className="flex items-center gap-2 px-3 py-2 rounded-md text-gray-600 hover:bg-gray-100"
                 >
-                    <ContactIcon size={20} />
+                    <ContactIcon size={20}/>
                     <span className="hidden sm:inline">Contact</span>
                 </button>
             </nav>
 
             {/* Right Side */}
             <div className="space-x-4 flex items-center">
-                <button onClick={() => navigate("/favorite-recipes")} className="text-gray-600 hover:text-orange-600 transition">
-                    <Heart size={22} />
+                <button onClick={() => navigate("/favorite-recipes")}
+                        className="text-gray-600 hover:text-orange-600 transition">
+                    <Heart size={22}/>
                 </button>
 
                 <button onClick={handleAddRecipeClick} className="text-gray-600 hover:text-orange-600 transition">

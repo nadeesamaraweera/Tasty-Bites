@@ -15,22 +15,29 @@ const HomePage: React.FC = () => {
     }, []);
 
     useEffect(() => {
-        const handleScroll = () => {
-            const sections = ["home", "about", "recipe-display", "contact"];
-            sections.forEach((section) => {
-                const sectionElement = document.getElementById(section);
-                if (sectionElement) {
-                    const rect = sectionElement.getBoundingClientRect();
-                    if (rect.top < window.innerHeight / 2 && rect.bottom > window.innerHeight / 2) {
-                        setActiveSection(section);
-                    }
-                }
-            });
-        };
+        const params = new URLSearchParams(location.search);
+        const scrollTarget = params.get("scroll");
 
-        window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
+        if (scrollTarget === "home") {
+            // scroll to top
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        } else if (scrollTarget === "recipes") {
+            const recipesSection = document.getElementById("recipes-display");
+            if (recipesSection) {
+                recipesSection.scrollIntoView({ behavior: "smooth" });
+            }
+        } else if (scrollTarget === "about") {
+            const aboutSection = document.getElementById("about");
+            if (aboutSection) {
+                aboutSection.scrollIntoView({ behavior: "smooth" });
+            }
+        } else if (scrollTarget === "contact") {
+            const contactSection = document.getElementById("contact");
+            if (contactSection) {
+                contactSection.scrollIntoView({ behavior: "smooth" });
+            }
+        }
+    }, [location]);
 
     return (
         <div className="relative flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-orange-100 via-white to-yellow-50 overflow-hidden">
