@@ -10,6 +10,8 @@ import {
     ClipboardPlus,
     LogOut,
     UserCircle,
+    Menu,
+    X
 } from "lucide-react";
 import Swal from "sweetalert2";
 import SignUpPopup from "../pages/SignUpPopup";
@@ -22,6 +24,7 @@ const NavBar: React.FC = () => {
     const [darkMode, setDarkMode] = useState(false);
     const [openSignupPopup, setOpenSignupPopup] = useState<boolean>(false);
     const [openLoginPopup, setOpenLoginPopup] = useState<boolean>(false);
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
     useEffect(() => {
         document.body.style.backgroundColor = darkMode ? "#000" : "#fff";
@@ -76,129 +79,154 @@ const NavBar: React.FC = () => {
         } else {
             navigate(`/?scroll=${sectionId}`);
         }
+        setMobileMenuOpen(false);
     };
 
     return (
-        <header className={`w-full flex justify-between items-center px-8 py-4 fixed top-0 z-10 shadow-md transition duration-300 ${darkMode ? "bg-black text-white" : "bg-white text-black"}`}>
-            {/* Logo Section */}
-            <div className="flex items-center space-x-3">
-                <img src="/src/assets/logo.png" alt="Logo" className="h-15 w-14"/>
-                <h1 className="text-4xl font-bold text-orange-700">TastyBites</h1>
-            </div>
+        <>
+            <header className={`w-full flex justify-between items-center px-4 py-4 fixed top-0 z-10 shadow-md transition duration-300 ${darkMode ? "bg-black text-white" : "bg-white text-black"}`}>
+                {/* Logo Section */}
+                <div className="flex items-center space-x-3">
+                    <img src="/src/assets/logo.png" alt="Logo" className="h-15 w-14" />
+                    <h1 className="text-3xl sm:text-4xl font-bold text-orange-700">TastyBites</h1>
+                </div>
 
-            {/* Navigation */}
-            <nav className="flex gap-6  font-medium text-lg mx-auto">
-                <button
-                    onClick={() => handleScrollToSection("home")}
-                    className="flex items-center gap-2 px-3 py-2 rounded-md text-gray-600 hover:text-orange-600"
+                {/* Desktop Navigation */}
+                <nav className="hidden sm:flex gap-6 font-medium text-lg mx-auto">
+                    <button onClick={() => handleScrollToSection("home")} className="flex items-center gap-2 text-gray-600 hover:text-orange-600">
+                        <HomeIcon size={20} /> Home
+                    </button>
+                    <button onClick={() => handleScrollToSection("about")} className="flex items-center gap-2 text-gray-600 hover:text-orange-600">
+                        <UserIcon size={20} /> About
+                    </button>
+                    <button onClick={() => handleScrollToSection("recipes-display")} className="flex items-center gap-2 text-gray-600 hover:text-orange-600">
+                        <CookingPot size={20} /> Recipes
+                    </button>
+                    <button onClick={() => handleScrollToSection("contact")} className="flex items-center gap-2 text-gray-600 hover:text-orange-600">
+                        <ContactIcon size={20} /> Contact
+                    </button>
+                </nav>
 
-                >
-                    <HomeIcon size={20}/>
-                    <span className="hidden sm:inline">Home</span>
-                </button>
+                {/* Right Side Icons */}
+                <div className="flex items-center space-x-4">
+                    {/* Mobile Menu Button */}
+                    <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="sm:hidden text-gray-600 hover:text-orange-600">
+                        {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                    </button>
 
-                <button
-                    onClick={() => handleScrollToSection("about")}
-                    className="flex items-center gap-2 px-3 py-2 rounded-md text-gray-600 hover:text-orange-600"
-                >
-                    <UserIcon size={20}/>
-                    <span className="hidden sm:inline">About</span>
-                </button>
-
-                <button
-                    onClick={() => handleScrollToSection("recipes-display")}
-                    className="flex items-center gap-2 px-3 py-2 rounded-md text-gray-600 hover:text-orange-600"
-                >
-                    <CookingPot size={20}/>
-                    <span className="hidden sm:inline">Recipes</span>
-                </button>
-
-                <button
-                    onClick={() => handleScrollToSection("contact")}
-                    className="flex items-center gap-2 px-3 py-2 rounded-md text-gray-600 hover:text-orange-600"
-                >
-                    <ContactIcon size={20}/>
-                    <span className="hidden sm:inline">Contact</span>
-                </button>
-            </nav>
-
-            {/* Right Side */}
-            <div className="space-x-4 flex items-center">
-                <button onClick={() => navigate("/favorite-recipes")}
-                        className="text-gray-600 hover:text-orange-600 transition">
-                    <Heart size={22}/>
-                </button>
-
-                <button onClick={handleAddRecipeClick} className="text-gray-600 hover:text-orange-600 transition">
-                    <ClipboardPlus size={22}/>
-                </button>
-
-                <button
-                    onClick={toggleDarkMode}
-                    className={`transition hover:text-orange-600 ${darkMode ? "text-white" : "text-gray-600"}`}
-                >
-                    <MoonIcon size={22}/>
-                </button>
-
-                {isLoggedIn ? (
-                    <div className="relative inline-block">
-                        <button
-                            onClick={() => setShowProfileMenu(!showProfileMenu)}
-                            className="text-gray-600 hover:text-orange-600 transition"
-                        >
-                            <UserCircle size={22}/>
+                    {/* Desktop Icons */}
+                    <div className="hidden sm:flex items-center space-x-4">
+                        <button onClick={() => navigate("/favorite-recipes")} className="text-gray-600 hover:text-orange-600">
+                            <Heart size={22} />
                         </button>
-                        {showProfileMenu && (
-                            <div className="absolute right-0 mt-2 w-40 bg-white border rounded-md shadow-lg z-50">
-                                <button
-                                    onClick={() => navigate("/my-recipes")}
-                                    className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-orange-100"
-                                >
-                                    My Recipes
+
+                        <button onClick={handleAddRecipeClick} className="text-gray-600 hover:text-orange-600">
+                            <ClipboardPlus size={22} />
+                        </button>
+
+                        <button onClick={toggleDarkMode} className={`hover:text-orange-600 ${darkMode ? "text-white" : "text-gray-600"}`}>
+                            <MoonIcon size={22} />
+                        </button>
+
+                        {isLoggedIn ? (
+                            <div className="relative">
+                                <button onClick={() => setShowProfileMenu(!showProfileMenu)} className="text-gray-600 hover:text-orange-600">
+                                    <UserCircle size={22} />
                                 </button>
-                                <button
-                                    onClick={handleLogout}
-                                    className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-orange-100"
-                                >
-                                    <LogOut size={16} className="inline mr-1"/>
-                                    Logout
-                                </button>
+                                {showProfileMenu && (
+                                    <div className="absolute right-0 mt-2 w-40 bg-white border rounded-md shadow-lg z-50">
+                                        <button onClick={() => navigate("/my-recipes")} className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-orange-100">
+                                            My Recipes
+                                        </button>
+                                        <button onClick={handleLogout} className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-orange-100">
+                                            <LogOut size={16} className="inline mr-1" /> Logout
+                                        </button>
+                                    </div>
+                                )}
                             </div>
+                        ) : (
+                            <button onClick={() => setOpenSignupPopup(true)} className="px-4 py-2 text-orange-500 border border-orange-500 rounded-md hover:bg-orange-500 hover:text-white transition">
+                                Signup
+                            </button>
                         )}
                     </div>
-                ) : (
-                    <button
-                        onClick={() => setOpenSignupPopup(true)}
-                        className="px-4 py-2 text-orange-500 border border-orange-500 rounded-md hover:bg-orange-500 hover:text-white transition"
-                    >
-                        Signup
-                    </button>
-                )}
+                </div>
+            </header>
 
-                {/* Modals for Signup and Login */}
-                {openSignupPopup && (
-                    <SignUpPopup
-                        setShowSignup={setOpenSignupPopup}
-                        setIsLoggedIn={setIsLoggedIn}
-                        onSwitchToLogin={() => {
-                            setOpenSignupPopup(false);
-                            setOpenLoginPopup(true);
-                        }}
-                    />
-                )}
+            {mobileMenuOpen && (
+                <div className="sm:hidden fixed top-0 right-0 h-full w-3/4 max-w-xs bg-white dark:bg-neutral-500 shadow-lg z-50 p-6 transition-transform duration-300">
+                    <div className="flex justify-between items-center mb-6">
+                        <div className="flex items-center space-x-2">
+                            <img src="/src/assets/logo.png" alt="Logo" className="h-10 w-10" />
+                            <h1 className="text-2xl font-bold text-orange-700">TastyBites</h1>
+                        </div>
+                        <button onClick={() => setMobileMenuOpen(false)}>
+                            <X size={24} className="text-gray-600 dark:text-white" />
+                        </button>
+                    </div>
 
-                {openLoginPopup && (
-                    <LoginPopup
-                        setShowLogin={setOpenLoginPopup}
-                        setIsLoggedIn={setIsLoggedIn}
-                        onSwitchToSignup={() => {
-                            setOpenLoginPopup(false);
-                            setOpenSignupPopup(true);
-                        }}
-                    />
-                )}
-            </div>
-        </header>
+                    {/* Nav Items */}
+                    <nav className="space-y-4">
+                        <button onClick={() => handleScrollToSection("home")} className="flex items-center gap-3 w-full text-left text-gray-700 dark:text-white hover:text-orange-600">
+                            <HomeIcon size={20} /> Home
+                        </button>
+                        <button onClick={() => handleScrollToSection("about")} className="flex items-center gap-3 w-full text-left text-gray-700 dark:text-white hover:text-orange-600">
+                            <UserIcon size={20} /> About
+                        </button>
+                        <button onClick={() => handleScrollToSection("recipes-display")} className="flex items-center gap-3 w-full text-left text-gray-700 dark:text-white hover:text-orange-600">
+                            <CookingPot size={20} /> Recipes
+                        </button>
+                        <button onClick={() => handleScrollToSection("contact")} className="flex items-center gap-3 w-full text-left text-gray-700 dark:text-white hover:text-orange-600">
+                            <ContactIcon size={20} /> Contact
+                        </button>
+                    </nav>
+
+                    {/* Bottom Icons */}
+                    <div className="mt-6 flex gap-4 items-center border-t pt-4">
+                        <button onClick={() => navigate("/favorite-recipes")} className="text-gray-600 dark:text-white hover:text-orange-600">
+                            <Heart size={22} />
+                        </button>
+                        <button onClick={handleAddRecipeClick} className="text-gray-600 dark:text-white hover:text-orange-600">
+                            <ClipboardPlus size={22} />
+                        </button>
+                        <button onClick={toggleDarkMode} className="text-gray-600 dark:text-white hover:text-orange-600">
+                            <MoonIcon size={22} />
+                        </button>
+                        {!isLoggedIn && (
+                            <button onClick={() => {
+                                setOpenSignupPopup(true);
+                                setMobileMenuOpen(false);
+                            }} className="text-orange-500 border border-orange-500 rounded-md px-3 py-1 hover:bg-orange-500 hover:text-white transition">
+                                Signup
+                            </button>
+                        )}
+                    </div>
+                </div>
+            )}
+
+
+            {/* Popups */}
+            {openSignupPopup && (
+                <SignUpPopup
+                    setShowSignup={setOpenSignupPopup}
+                    setIsLoggedIn={setIsLoggedIn}
+                    onSwitchToLogin={() => {
+                        setOpenSignupPopup(false);
+                        setOpenLoginPopup(true);
+                    }}
+                />
+            )}
+            {openLoginPopup && (
+                <LoginPopup
+                    setShowLogin={setOpenLoginPopup}
+                    setIsLoggedIn={setIsLoggedIn}
+                    onSwitchToSignup={() => {
+                        setOpenLoginPopup(false);
+                        setOpenSignupPopup(true);
+                    }}
+                />
+            )}
+        </>
     );
 };
 

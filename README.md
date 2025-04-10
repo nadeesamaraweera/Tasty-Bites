@@ -1,54 +1,47 @@
-# React + TypeScript + Vite
+# 🌟 TastyBites - Recipe Sharing Platform
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+TastyBites is a **modern recipe-sharing frontend** built with React, TypeScript, and Tailwind CSS. It allows users to **discover**, **share**, and **interact** with a variety of recipes — all through a sleek and responsive UI.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🛠️ Tech Stack
 
-## Expanding the ESLint configuration
+- **React.js**
+- **Redux (for state management)**
+- **TypeScript**
+- **Tailwind CSS**
+- **Material UI (for additional components)**
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+## ✨ Key Features
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+- 🔍 **Search Functionality**  
+  Users can search for recipes by title or ingredients.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- 🧾 **Recipe Cards Display**  
+  Each recipe is displayed in a visually appealing card layout.
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+- 📱 **Responsive Design**  
+  The platform layout adjusts to different screen sizes, ensuring the best experience across devices.
+
+- 🧩 **Component-Based Architecture**  
+  Modular components make the app easy to maintain and extend.
+
+- 🎨 **Custom Styling with Tailwind CSS**  
+  Utility-first classes from Tailwind make styling efficient and consistent.
+
+- 🎛️ **State Management with Redux**  
+  Redux is used for managing application state, making it easy to handle data flow.
+
+---
+
+## ⚙️ Setup & Installation
+
+### 1️⃣ Clone the Repository
+
+Clone the repository to your local machine:
+
+```bash
+git clone https://github.com/yehaniharshika/recipe-sharing-platform-treinetic-practical-assignment.git
+cd recipe-sharing-platform-treinetic-practical-assignment
